@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    <title>QuotesGenerator</title>
+</head>
+<body>
+ 
+    <div class="container">
+        <div class="inner">
+            <div class="box">
+                <button id="tweetMe" class="number">
+                    <i class="fa-brands fa-twitter" style="color: #2669df;"></i>
+                </button>
+            
+                <div class="text">
+                    <i class="start-quote fas fa-quote-left"></i>
+                    <p id="quotes" class="quotes" ></p>
+                    <p id="author" class="author"></p>
+                </div>
+
+                <label class="button">
+                    <p id="newQ">New Quotes</p>
+                </label>
+            </div>
+
+        </div>
+    </div>
+
+<script>
+    const quotes = document.getElementById("quotes");
+    const author = document.getElementById("author");
+    const newQ = document.getElementById("newQ");
+    const tweetMe = document.getElementById("tweetMe");
+    let  realData = "";
+    let quotesData = "";
+
+    const tweetNow = () => {
+        let tweetPost = `https://twitter.com/intent/tweet?text=${quotesData.text}`;
+        window.open(tweetPost);
+    }
+
+    const getNewQuotes = async() => {
+        let rnum = Math.floor(Math.random() * 200);
+        quotesData = realData[rnum];
+        quotes.innerText = `${quotesData.text}`;
+
+        quotesData.author == null 
+        ? (author.innerText == "Anonymous") 
+        : (author.innerText = `${quotesData.author}`);
+    }
+    const getQuotes = async() => {
+        const api = "https://jacintodesign.github.io/quotes-api/data/quotes.json"
+        try {
+            let data = await fetch(api);
+            realData = await data.json();
+            // console.log(realData.length);
+            getNewQuotes();
+        } catch (error) {
+            
+        }
+    }
+    
+ 
+    tweetMe.addEventListener('click',tweetNow);
+    newQ.addEventListener('click', getNewQuotes);
+    getQuotes();
+</script>
+</body>
+</html>
